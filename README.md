@@ -56,10 +56,10 @@ valDataset = loadDataset("Data/Val_Dataset.tsv",
 
 testDataset = loadDataset("Data/Test_Dataset.tsv")
 ```
-`loadDataset` method is used for creating a Huggingface Dataset from tsv files provided in the shared task. it has one positional parameter and two optional parameters.
-`dataPath` is the first parameter and it is the path of the dataset
-`labelPath` is the path of labels file for the dataset (if available)
-`scoresPath` is the path of scores file for the dataset (if available)
+`loadDataset` method is used for creating a Huggingface Dataset from tsv files provided in the shared task. it has one positional parameter and two optional parameters. <br/><br/>
+`dataPath` is the first parameter and it is the path of the dataset <br/>
+`labelPath` is the path of labels file for the dataset (if available) <br/>
+`scoresPath` is the path of scores file for the dataset (if available) <br/>
 
 ### Initializing Tokenizer and DataCollator
 ```python
