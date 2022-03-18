@@ -68,3 +68,9 @@ data_collator = ts.DataCollatorWithPadding(tokenizer=tokenizer , return_tensors=
 ```
 Since our code is based on Huggingface library you should use a pre-trained tokenizer from Huggingface or train your own tokenizer
 
+### Preprocessing Datasets
+```python
+tokenizedTrainDataset = preprocessDataset(trainDataset , tokenizer)
+tokenizedValDataset = preprocessDataset(valDataset , tokenizer)
+tokenizedTestDataset = preprocessDataset(testDataset , tokenizer)
+```
