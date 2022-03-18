@@ -40,6 +40,27 @@ Note that, the data_loader.py file should be next to Nowruz_SemEval.py since in 
 
 ### Setup
 ```python
-from nowruz_semeval import *
+from Nowruz_SemEval import *
 import transformers as ts
 ```
+
+### Loading Datasets
+```python
+trainDataset = loadDataset("Data/Train_Dataset.tsv",
+                           "Data/Train_Labels.tsv", 
+                           "Data/Train_Scores.tsv")
+
+valDataset = loadDataset("Data/Val_Dataset.tsv",
+                         "Data/Val_Labels.tsv", 
+                         "Data/Val_Scores.tsv")
+
+testDataset = loadDataset("Data/Test_Dataset.tsv")
+```
+
+#Initializing Tokenizer and DataCollator
+```python
+tokenizer = ts.AutoTokenizer.from_pretrained("microsoft/deberta-v3-base")
+data_collator = ts.DataCollatorWithPadding(tokenizer=tokenizer , return_tensors="pt")
+```
+Since our code is based on Huggingface library you should use a pre-trained tokenizer from Huggingface or train your own tokenizer
+
