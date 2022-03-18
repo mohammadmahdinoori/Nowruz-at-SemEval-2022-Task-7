@@ -26,3 +26,18 @@ The system employed a combination of two ordinal regression components to tackle
 | T5         | 62.40% | 0.7070 |
 
 Check out all of the results in this [link](https://competitions.codalab.org/competitions/35210#results) (Click on Evaluation)
+
+# Usage
+In this section, we will explain how to use our code to reproduce our results as well as how to run experiments on your own datasets.
+
+### Requirements
+
+```bash
+pip install transformers datasets sentencepiece coral_pytorch
+```
+
+### Setup
+```python
+from nowruz_semeval import *
+import transformers as ts
+```
