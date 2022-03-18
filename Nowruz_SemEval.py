@@ -36,13 +36,6 @@ from scipy import stats
 
 import sys
 
-from data_loader import (
-    retrieve_instances_from_dataset,
-    retrieve_labels_from_dataset_for_classification,
-    retrieve_labels_from_dataset_for_ranking,
-    write_predictions_to_file,
-)
-
 """#Preparing Data"""
 
 def loadDataset(dataPath , labelPath=None , scoresPath=None):
