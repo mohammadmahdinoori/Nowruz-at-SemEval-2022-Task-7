@@ -36,6 +36,8 @@ In this section, we will explain how to use our code to reproduce our results as
 pip install transformers datasets sentencepiece coral_pytorch
 ```
 
+Note that, the data_loader.py file should be next to Nowruz_SemEval.py since in the Nowruz_SemEval.py, a direct import is used.
+
 ### Setup
 ```python
 from nowruz_semeval import *
