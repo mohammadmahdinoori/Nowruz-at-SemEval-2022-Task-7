@@ -47,17 +47,21 @@ import transformers as ts
 ### Loading Datasets
 ```python
 trainDataset = loadDataset("Data/Train_Dataset.tsv",
-                           "Data/Train_Labels.tsv", 
-                           "Data/Train_Scores.tsv")
+                           labelPath="Data/Train_Labels.tsv", 
+                           scoresPath="Data/Train_Scores.tsv")
 
 valDataset = loadDataset("Data/Val_Dataset.tsv",
-                         "Data/Val_Labels.tsv", 
-                         "Data/Val_Scores.tsv")
+                         labelPath="Data/Val_Labels.tsv", 
+                         scoresPath="Data/Val_Scores.tsv")
 
 testDataset = loadDataset("Data/Test_Dataset.tsv")
 ```
+`loadDataset` method is used for creating a Huggingface Dataset from tsv files provided in the shared task. it has one positional parameter and two optional parameters.
+`dataPath` is the first parameter and it is the path of the dataset
+`labelPath` is the path of labels file for the dataset (if available)
+`scoresPath` is the path of scores file for the dataset (if available)
 
-#Initializing Tokenizer and DataCollator
+### Initializing Tokenizer and DataCollator
 ```python
 tokenizer = ts.AutoTokenizer.from_pretrained("microsoft/deberta-v3-base")
 data_collator = ts.DataCollatorWithPadding(tokenizer=tokenizer , return_tensors="pt")
