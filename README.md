@@ -18,7 +18,7 @@ The system employed a combination of two ordinal regression components to tackle
 | DeBERTa-V3 | 64.12% | 0.7411 |
 | T5         | 62.24% | 0.6949 |
 
-### Best Results on Leaderborad
+### Best Results on Leaderboard
 | Model  | Best Acc  | Best Rank |
 | :------------ |:-----:| :-----:|
 | RoBERTa    | 61.00% | 0.6700 |
