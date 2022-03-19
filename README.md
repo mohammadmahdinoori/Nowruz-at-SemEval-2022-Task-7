@@ -156,5 +156,11 @@ the `makeTrainer` function is used to initialize a `trainer` which is used to tr
 - `trainDataset`: this should be a preprocessed Huggingface dataset (as defined in `Preprocessing Datasets` section)
 - `data_collator`: a DataCollatorWithPadding object from Huggingface (as defined in `Initializing Tokenizer and DataCollator` section)
 - `tokenizer`: a Huggingface tokenizer (as defined in `Initializing Tokenizer and DataCollator` section)
-
-
+- `outputsPath`: a path for saving model checkpoints
+- `learning_rate`: learning rate used for the training
+- `scheduler`: type of learning rate scheduler used for training it can be one of `linear`, `cosine`, `cosine_with_restarts`, `constant`
+- `save_steps`: number of steps after which the model is saved
+- `batch_size`: batch size used for training
+- `num_epochs`: number of training epochs
+- `weight_decay`: weight decay used for regularization
+- `roundingType`: rounding type of the scores which is explained in the paper. This can be either `F` or `R`. `F` will floor the scores and `R` will round the scores.
