@@ -66,7 +66,7 @@ testDataset = loadDataset("Data/Test_Dataset.tsv")
 tokenizer = ts.AutoTokenizer.from_pretrained("microsoft/deberta-v3-base")
 data_collator = ts.DataCollatorWithPadding(tokenizer=tokenizer , return_tensors="pt")
 ```
-Since our code is based on Huggingface library you should use a pre-trained tokenizer from Huggingface or train your own tokenizer
+Since our code is based on Huggingface library you should use a pre-trained tokenizer from Huggingface or train your own tokenizer using a raw tokenizer from Huggingface library. Note that the tokenizer you use should match your model. for instance if you use T5 model you should use T5 tokenizer. Here, since we want to use DeBERTa-v3, we use DeBERTa-v3 tokenizer.
 
 ### Preprocessing Datasets
 ```python
@@ -117,7 +117,7 @@ model = model_init(customEncoder=customEncoder,
 ```
 
 #### Parameters
-- `encoderPath`: path of the pre-trained transformer which should be taken from the Huggingface model zoo.
+- `encoderPath`: path of the pre-trained transformer which can be either a path from the Huggingface model zoo or a path to a local folder which contains the saved pre-trained transformer.
 - `dimKey`: the key of the hidden dimension size of the selected transformer which can be found in the config of the model. (to find this value just load the pre-trained model yourself and then print the value of `model.config`, However it is mostly `hidden_size` or `d_model`)
 - `customEncoder`: the pre-trained transformer model object
 - `customDim`: this is an int value which is the hidden dimension size of the pre-trained transformer
@@ -133,3 +133,28 @@ model = model_init(customEncoder=customEncoder,
 - `dropout_rate`: rate of the last dropout layer before passing the final output to the classification and regression heads.
 
 Note that you should use one of the `encoderPath` and `customEncoder` and not both. it is also true for the `dimKey` and `customDim`. Also, the `num_labels` and `num_ranks` should be set to `3` and `5` respectively while using our preprocessings for this task.
+
+### Initializing Trainer and Data Collator
+```python
+trainer , collate_function = makeTrainer(model=model, 
+                                         trainDataset=tokenizedTrainDataset,
+                                         data_collator=data_collator,
+                                         tokenizer=tokenizer, 
+                                         outputsPath="outputs/", 
+                                         learning_rate=1.90323e-05, 
+                                         scheduler="cosine",
+                                         save_steps=5000,
+                                         batch_size=8,
+                                         num_epochs=5,
+                                         weight_decay=0.00123974,
+                                         roundingType="F")
+```
+the `makeTrainer` function is used to initialize a `trainer` which is used to train the model and a `data_collator` function which is used in both, training and inference of the model.
+
+#### Parameters
+- `model`: this is the full model which is the output of the `model_init` function
+- `trainDataset`: this should be a preprocessed Huggingface dataset (as defined in `Preprocessing Datasets` section)
+- `data_collator`: a DataCollatorWithPadding object from Huggingface (as defined in `Initializing Tokenizer and DataCollator` section)
+- `tokenizer`: a Huggingface tokenizer (as defined in `Initializing Tokenizer and DataCollator` section)
+
+
