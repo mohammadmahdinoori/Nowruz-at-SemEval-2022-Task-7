@@ -151,6 +151,11 @@ trainer , collate_function = makeTrainer(model=model,
 ```
 the `makeTrainer` function is used to initialize a `trainer` which is used to train the model and a `data_collator` function which is used in both, training and inference of the model.
 
+#### Training
+```python
+trainer.train()
+```
+
 #### Parameters
 - `model`: this is the full model which is the output of the `model_init` function
 - `trainDataset`: this should be a preprocessed Huggingface dataset (as defined in `Preprocessing Datasets` section)
@@ -164,3 +169,15 @@ the `makeTrainer` function is used to initialize a `trainer` which is used to tr
 - `num_epochs`: number of training epochs
 - `weight_decay`: weight decay used for regularization
 - `roundingType`: rounding type of the scores which is explained in the paper. This can be either `F` or `R`. `F` will floor the scores and `R` will round the scores.
+
+### Evaluating Model on Validation Dataset
+```python
+(labels , scores) , accuracy , spearman = evaluateModel(model, tokenizedValDataset, collate_function)
+
+print(f"Accuracy is: {accuracy}")
+print(f"Spearman is: {spearman}")
+```
+
+The `evaluateModel` function takes three positional arguments. First is the model you want to evaluate, Second is the preprocessed validation dataset and Third is the `collate_function` which is one of the outputs of the `makeTrainer` function. The outputs of this function are predicted `labels` and `scores`, `accuracy`, and the `spearman correlation`.
+
+### Making Predictions on Test Dataset
