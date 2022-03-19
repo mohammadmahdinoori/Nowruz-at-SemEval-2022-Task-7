@@ -131,7 +131,6 @@ model = model_init(customEncoder=customEncoder,
 - `lambda_c`: the classification loss coeficiente used in the combined loss (this is only used if the mode of the model is set to `both`)
 - `lambda_r`: the regression loss coeficiente used in the combined loss (this is only used if the mode of the model is set to `both`)
 - `dropout_rate`: rate of the last dropout layer before passing the final output to the classification and regression heads.
-<br/>
+
 Note that you should use one of the `encoderPath` and `customEncoder` and not both. it is also true for the `dimKey` and `customDim`
-<br/>
-Note that `num_labels` and `num_ranks` should be set to 3 and 5 respectively while using our preprocessings for this task.
+Note that `num_labels` and `num_ranks` should be set to `3` and `5` respectively while using our preprocessings for this task.
