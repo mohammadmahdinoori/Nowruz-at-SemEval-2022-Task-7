@@ -74,3 +74,26 @@ tokenizedTrainDataset = preprocessDataset(trainDataset , tokenizer)
 tokenizedValDataset = preprocessDataset(valDataset , tokenizer)
 tokenizedTestDataset = preprocessDataset(testDataset , tokenizer)
 ```
+### Initializing Model
+In order to initialize your model you have to select a pre-trained transformer as a backbone, to do so you have two options. First, you can use the pre-trained transformer path from Huggingface model zoo. Second, you can load pre-trained transformer yourself and then pass the model object to the make_model method.
+
+#### Using Pre-Trained Transformer Path
+```python
+model = model_init(encoderPath="microsoft/deberta-v3-base",
+                   dimKey="hidden_size",
+                   mode="both",
+                   use_coral=True, 
+                   use_cls=True, 
+                   supportPooledRepresentation=False,
+                   freezeEmbedding=True, 
+                   num_labels=3, 
+                   num_ranks=5, 
+                   lambda_c=0.5, 
+                   lambda_r=0.5, 
+                   dropout_rate=0.2,)
+```
+
+#### Parameters
+- `encoderPath`: path of the pre-trained transformer which should be taken from the Huggingface model zoo.
+- `dimKey`: the key of the hidden dimension size of the selected transformer which can be found in the config of the model. (to find this value just load the pre-trained model yourself and then print the value of `model.config`, However it is mostly `hidden_size` or `d_model`)
+- `mode`: this property controls the training loss of the model. if the value is `both` the model is trained using a combined loss in a multi-task learning scenario (as defined in the paper). if the value is `classification` the model is trained using only the classification loss which is obtained from the labels. if the value is `regression` the model is trained using only the regression loss which is obtained from the scores.
