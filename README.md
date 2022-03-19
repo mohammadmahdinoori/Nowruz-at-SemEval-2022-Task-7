@@ -93,12 +93,45 @@ model = model_init(encoderPath="microsoft/deberta-v3-base",
                    dropout_rate=0.2,)
 ```
 
+#### Loading Pre-Trained Transformer Yourself
+```python
+customEncoder = ts.T5EncoderModel.from_pretrained("t5-base")
+customDim = customEncoder.config.to_dict()["d_model"]
+
+#Freezing The Embedding Manually
+customEncoder.shared.requires_grad = False
+customEncoder.encoder.embed_tokens.requires_grad = False
+
+model = model_init(customEncoder=customEncoder,
+                   customDim=customDim,
+                   mode="both", 
+                   use_coral=True, 
+                   use_cls=False, 
+                   supportPooledRepresentation=False,
+                   freezeEmbedding=False,
+                   num_labels=3, 
+                   num_ranks=5, 
+                   lambda_c=0.5, 
+                   lambda_r=0.5, 
+                   dropout_rate=0.2,)
+```
+
 #### Parameters
 - `encoderPath`: path of the pre-trained transformer which should be taken from the Huggingface model zoo.
 - `dimKey`: the key of the hidden dimension size of the selected transformer which can be found in the config of the model. (to find this value just load the pre-trained model yourself and then print the value of `model.config`, However it is mostly `hidden_size` or `d_model`)
+- `customEncoder`: the pre-trained transformer model object
+- `customDim`: this is an int value which is the hidden dimension size of the pre-trained transformer
 - `mode`: this property controls the training loss of the model. if the value is `both` the model is trained using a combined loss in a multi-task learning scenario (as defined in the paper). if the value is `classification` the model is trained using only the classification loss which is obtained from the labels. if the value is `regression` the model is trained using only the regression loss which is obtained from the scores.
 - `use_coral `: if true the classification head would be a coral dense layer and the classification loss would be coral loss. (default is True)
 - `use_cls`: this should be true if the model inserts a special token (like `[CLS]`) at the begining of each sentence otherwise it should be false. in BERT-Like models such as BERT, RoBERTa, DeBERTa, ELECTRA, and etc. this should be set to true but in models like GPT and T5 it should be set to false.
 - `supportPooledRepresentation`: some models like BERT and RoBERTa use a dense layer after the last Transformer layer and pass the output of the `[CLS]` token to that dense layer followed by an activation function mostly `Tanh`. if the model has this option you should see a dense layer mostly called `Pooler` in the state_dict of the model. if the model has `Pooler` this property of the model_init function should be set to true otherwise it should be false.
-- `freezeEmbedding`: set it to true if you want to freeze the embedding layer of the pre-trained transformer (default is true). note that if your transformer (e.g. T5) embedding layer has a name different from `embeddings` this property would not work and you should explicitly freeze the embedding layer before passing the transformer to `model_init` function which is explained in the next section.
+- `freezeEmbedding`: set it to true if you want to freeze the embedding layer of the pre-trained transformer (default is true). note that if your transformer (e.g. T5) embedding layer has a name different from `embeddings` this property would not work and you should explicitly freeze the embedding layer before passing the transformer to `model_init` function.
 - `num_labels`: number of plausibility labels which is `3` in the shared task dataset.
+- `num_ranks`: number of different ranks which depends on the boundry used for converting continuos scores into discrete socres which is `5` if the boundry is `1` (ranks would be 1 , 2 , 3 , 4 , 5)
+- `lambda_c`: the classification loss coeficiente used in the combined loss (this is only used if the mode of the model is set to `both`)
+- `lambda_r`: the regression loss coeficiente used in the combined loss (this is only used if the mode of the model is set to `both`)
+- `dropout_rate`: rate of the last dropout layer before passing the final output to the classification and regression heads.
+<br/>
+Note that you should use one of the `encoderPath` and `customEncoder` and not both. it is also true for the `dimKey` and `customDim`
+<br/>
+Note that `num_labels` and `num_ranks` should be set to 3 and 5 respectively while using our preprocessings for this task.
