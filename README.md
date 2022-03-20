@@ -181,3 +181,13 @@ print(f"Spearman is: {spearman}")
 The `evaluateModel` function takes three positional arguments. First is the model you want to evaluate, Second is the preprocessed validation dataset and Third is the `collate_function` which is one of the outputs of the `makeTrainer` function. The outputs of this function are predicted `labels` and `scores`, `accuracy`, and the `spearman correlation`.
 
 ### Making Predictions on Test Dataset
+
+```python
+ids , labels , scores = predictOnTestDataset(model,
+                                             tokenizedTestDataset, 
+                                             collate_function, 
+                                             labelsPath="classification_answers.tsv", 
+                                             scoresPath="ranking_answers.tsv")
+```
+
+This method is used to perform predictions on the test dataset of the shared task where no label nor score is available. This method has three positional arguments and two optional arguments. The three positional ones are the `model`, the `preprocessed test dataset`, and the `collate_function` which is one of the outputs of the `makeTrainer` function. There are two other optional parameters which are used if you want to save predictions to a file. The `lablesPath` is the path used for saving predicted labels and The `scoresPath` is the path used for saving predicted scores.
