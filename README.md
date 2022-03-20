@@ -191,3 +191,17 @@ ids , labels , scores = predictOnTestDataset(model,
 ```
 
 This method is used to perform predictions on the test dataset of the shared task where no label nor score is available. This method has three positional arguments and two optional arguments. The three positional ones are the `model`, the `preprocessed test dataset`, and the `collate_function` which is one of the outputs of the `makeTrainer` function. There are two other optional parameters which are used if you want to save predictions to a file. The `lablesPath` is the path used for saving predicted labels and The `scoresPath` is the path used for saving predicted scores.
+
+## Using Model for Inference
+
+```python
+output = inference(model, 
+                   sentences=["This is a [MASK] to see how model works" , "This is a [MASK] to see how model works"], 
+                   fillers=["test" , "fork"],
+                   tokenizer=tokenizer,
+                   collate_function=collate_function,)
+
+print(output)
+```
+
+This method is used to make predictions on your own samples! you can input regular sentences just like above, However, to get the most out of our models you should input your sentences using the special formatting explained in our paper. This function takes in the trained model, a list of sentences with a special `[MASK]` token at the place of the filler, a list of fillers which contains a filler for each sentence, the `tokenizer`, and the `collate_function`.
