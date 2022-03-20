@@ -238,8 +238,8 @@ tokenizedTrainDataset = preprocessDataset(trainDataset , tokenizer)
 tokenizedValDataset = preprocessDataset(valDataset , tokenizer)
 tokenizedTestDataset = preprocessDataset(testDataset , tokenizer)
 
-model = model_init(encoderPath="microsoft/deberta-v3-base",
-                   dimKey="hidden_size",
+model = model_init(encoderPath=PRE_TRAINED_MODEL,
+                   dimKey=DIM_KEY,
                    mode="both",
                    use_coral=True, 
                    use_cls=True, 
