@@ -192,7 +192,7 @@ ids , labels , scores = predictOnTestDataset(model,
 
 This method is used to perform predictions on the test dataset of the shared task where no label nor score is available. This method has three positional arguments and two optional arguments. The three positional ones are the `model`, the `preprocessed test dataset`, and the `collate_function` which is one of the outputs of the `makeTrainer` function. There are two other optional parameters which are used if you want to save predictions to a file. The `lablesPath` is the path used for saving predicted labels and The `scoresPath` is the path used for saving predicted scores.
 
-## Using Model for Inference
+## Using Model For Inference
 
 ```python
 output = inference(model, 
@@ -205,3 +205,83 @@ print(output)
 ```
 
 This method is used to make predictions on your own samples! you can input regular sentences just like above, However, to get the most out of our models you should input your sentences using the special formatting explained in our paper. This function takes in the trained model, a list of sentences with a special `[MASK]` token at the place of the filler, a list of fillers which contains a filler for each sentence, the `tokenizer`, and the `collate_function`.
+
+## Full Code For Training DeBERTa-V3
+```bash
+git clone https://github.com/mohammadmahdinoori/Nowruz-at-SemEval-2022-Task-7.git
+```
+
+```python
+import sys
+sys.path.append("Nowruz-at-SemEval-2022-Task-7/")
+
+from Nowruz_SemEval import *
+import transformers as ts
+
+PRE_TRAINED_MODEL = "microsoft/deberta-v3-base"
+DIM_KEY = "hidden_size"
+
+trainDataset = loadDataset("Data/Train_Dataset.tsv",
+                           labelPath="Data/Train_Labels.tsv", 
+                           scoresPath="Data/Train_Scores.tsv")
+
+valDataset = loadDataset("Data/Val_Dataset.tsv",
+                         labelPath="Data/Val_Labels.tsv", 
+                         scoresPath="Data/Val_Scores.tsv")
+
+testDataset = loadDataset("Data/Test_Dataset.tsv")
+
+tokenizer = ts.AutoTokenizer.from_pretrained(PRE_TRAINED_MODEL)
+data_collator = ts.DataCollatorWithPadding(tokenizer=tokenizer , return_tensors="pt")
+
+tokenizedTrainDataset = preprocessDataset(trainDataset , tokenizer)
+tokenizedValDataset = preprocessDataset(valDataset , tokenizer)
+tokenizedTestDataset = preprocessDataset(testDataset , tokenizer)
+
+model = model_init(encoderPath="microsoft/deberta-v3-base",
+                   dimKey="hidden_size",
+                   mode="both",
+                   use_coral=True, 
+                   use_cls=True, 
+                   supportPooledRepresentation=False,
+                   freezeEmbedding=True, 
+                   num_labels=3, 
+                   num_ranks=5, 
+                   lambda_c=0.5, 
+                   lambda_r=0.5, 
+                   dropout_rate=0.2,)
+                   
+trainer , collate_function = makeTrainer(model=model, 
+                                         trainDataset=tokenizedTrainDataset,
+                                         data_collator=data_collator,
+                                         tokenizer=tokenizer, 
+                                         outputsPath="outputs/", 
+                                         learning_rate=1.90323e-05, 
+                                         scheduler="cosine",
+                                         save_steps=5000,
+                                         batch_size=8,
+                                         num_epochs=5,
+                                         weight_decay=0.00123974,
+                                         roundingType="F")
+                                         
+trainer.train()
+
+(labels , scores) , accuracy , spearman = evaluateModel(model, tokenizedValDataset, collate_function)
+
+print(f"Accuracy is: {accuracy}")
+print(f"Spearman is: {spearman}")
+
+ids , labels , scores = predictOnTestDataset(model,
+                                             tokenizedTestDataset, 
+                                             collate_function, 
+                                             labelsPath="classification_answers.tsv", 
+                                             scoresPath="ranking_answers.tsv")
+                                             
+output = inference(model, 
+                   sentences=["This is a [MASK] to see how model works" , "This is a [MASK] to see how model works"], 
+                   fillers=["test" , "fork"],
+                   tokenizer=tokenizer,
+                   collate_function=collate_function,)
+
+print(output)
+```
