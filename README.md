@@ -30,7 +30,7 @@ Check out all of the results in this [link](https://competitions.codalab.org/com
 # Usage
 In this section, we will explain how to use our code to reproduce our results as well as how to run experiments on your own datasets.
 
-### Requirements
+## Requirements
 
 ```bash
 pip install transformers datasets sentencepiece coral_pytorch
@@ -38,13 +38,13 @@ pip install transformers datasets sentencepiece coral_pytorch
 
 Note that, the data_loader.py file should be next to Nowruz_SemEval.py since in the Nowruz_SemEval.py, a direct import is used.
 
-### Setup
+## Setup
 ```python
 from Nowruz_SemEval import *
 import transformers as ts
 ```
 
-### Loading Datasets
+## Loading Datasets
 ```python
 trainDataset = loadDataset("Data/Train_Dataset.tsv",
                            labelPath="Data/Train_Labels.tsv", 
@@ -61,23 +61,23 @@ testDataset = loadDataset("Data/Test_Dataset.tsv")
 `labelPath` is the path of labels file for the dataset (if available) <br/>
 `scoresPath` is the path of scores file for the dataset (if available) <br/>
 
-### Initializing Tokenizer and DataCollator
+## Initializing Tokenizer and DataCollator
 ```python
 tokenizer = ts.AutoTokenizer.from_pretrained("microsoft/deberta-v3-base")
 data_collator = ts.DataCollatorWithPadding(tokenizer=tokenizer , return_tensors="pt")
 ```
 Since our code is based on Huggingface library you should use a pre-trained tokenizer from Huggingface or train your own tokenizer using a raw tokenizer from Huggingface library. Note that the tokenizer you use should match your model. for instance if you use T5 model you should use T5 tokenizer. Here, since we want to use DeBERTa-v3, we use DeBERTa-v3 tokenizer.
 
-### Preprocessing Datasets
+## Preprocessing Datasets
 ```python
 tokenizedTrainDataset = preprocessDataset(trainDataset , tokenizer)
 tokenizedValDataset = preprocessDataset(valDataset , tokenizer)
 tokenizedTestDataset = preprocessDataset(testDataset , tokenizer)
 ```
-### Initializing Model
+## Initializing Model
 In order to initialize your model you have to select a pre-trained transformer as a backbone, to do so you have two options. First, you can use the pre-trained transformer path from Huggingface model zoo. Second, you can load pre-trained transformer yourself and then pass the model object to the `model_init` method.
 
-#### Using Pre-Trained Transformer Path
+### Using Pre-Trained Transformer Path
 ```python
 model = model_init(encoderPath="microsoft/deberta-v3-base",
                    dimKey="hidden_size",
@@ -93,7 +93,7 @@ model = model_init(encoderPath="microsoft/deberta-v3-base",
                    dropout_rate=0.2,)
 ```
 
-#### Loading Pre-Trained Transformer Yourself
+### Loading Pre-Trained Transformer Yourself
 ```python
 customEncoder = ts.T5EncoderModel.from_pretrained("t5-base")
 customDim = customEncoder.config.to_dict()["d_model"]
@@ -116,7 +116,7 @@ model = model_init(customEncoder=customEncoder,
                    dropout_rate=0.2,)
 ```
 
-#### Parameters
+### Parameters
 - `encoderPath`: path of the pre-trained transformer which can be either a path from the Huggingface model zoo or a path to a local folder which contains the saved pre-trained transformer.
 - `dimKey`: the key of the hidden dimension size of the selected transformer which can be found in the config of the model. (to find this value just load the pre-trained model yourself and then print the value of `model.config`, However it is mostly `hidden_size` or `d_model`)
 - `customEncoder`: the pre-trained transformer model object
@@ -134,7 +134,7 @@ model = model_init(customEncoder=customEncoder,
 
 Note that you should use one of the `encoderPath` and `customEncoder` and not both. it is also true for the `dimKey` and `customDim`. Also, the `num_labels` and `num_ranks` should be set to `3` and `5` respectively while using our preprocessings for this task.
 
-### Initializing Trainer and Data Collator
+## Initializing Trainer and Data Collator
 ```python
 trainer , collate_function = makeTrainer(model=model, 
                                          trainDataset=tokenizedTrainDataset,
@@ -151,12 +151,12 @@ trainer , collate_function = makeTrainer(model=model,
 ```
 the `makeTrainer` function is used to initialize a `trainer` which is used to train the model and a `data_collator` function which is used in both, training and inference of the model.
 
-#### Training
+### Training
 ```python
 trainer.train()
 ```
 
-#### Parameters
+### Parameters
 - `model`: this is the full model which is the output of the `model_init` function
 - `trainDataset`: this should be a preprocessed Huggingface dataset (as defined in `Preprocessing Datasets` section)
 - `data_collator`: a DataCollatorWithPadding object from Huggingface (as defined in `Initializing Tokenizer and DataCollator` section)
@@ -170,7 +170,7 @@ trainer.train()
 - `weight_decay`: weight decay used for regularization
 - `roundingType`: rounding type of the scores which is explained in the paper. This can be either `F` or `R`. `F` will floor the scores and `R` will round the scores.
 
-### Evaluating Model on Validation Dataset
+## Evaluating Model on Validation Dataset
 ```python
 (labels , scores) , accuracy , spearman = evaluateModel(model, tokenizedValDataset, collate_function)
 
@@ -180,7 +180,7 @@ print(f"Spearman is: {spearman}")
 
 The `evaluateModel` function takes three positional arguments. First is the model you want to evaluate, Second is the preprocessed validation dataset and Third is the `collate_function` which is one of the outputs of the `makeTrainer` function. The outputs of this function are predicted `labels` and `scores`, `accuracy`, and the `spearman correlation`.
 
-### Making Predictions on Test Dataset
+## Making Predictions on Test Dataset
 
 ```python
 ids , labels , scores = predictOnTestDataset(model,
