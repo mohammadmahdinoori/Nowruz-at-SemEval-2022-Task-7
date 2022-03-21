@@ -225,15 +225,15 @@ import transformers as ts
 PRE_TRAINED_MODEL = "microsoft/deberta-v3-base"
 DIM_KEY = "hidden_size"
 
-trainDataset = loadDataset("Data/Train_Dataset.tsv",
-                           labelPath="Data/Train_Labels.tsv", 
-                           scoresPath="Data/Train_Scores.tsv")
+trainDataset = loadDataset("Nowruz-at-SemEval-2022-Task-7/Data/Train_Dataset.tsv",
+                           labelPath="Nowruz-at-SemEval-2022-Task-7/Data/Train_Labels.tsv", 
+                           scoresPath="Nowruz-at-SemEval-2022-Task-7/Data/Train_Scores.tsv")
 
-valDataset = loadDataset("Data/Val_Dataset.tsv",
-                         labelPath="Data/Val_Labels.tsv", 
-                         scoresPath="Data/Val_Scores.tsv")
+valDataset = loadDataset("Nowruz-at-SemEval-2022-Task-7/Data/Val_Dataset.tsv",
+                         labelPath="Nowruz-at-SemEval-2022-Task-7/Data/Val_Labels.tsv", 
+                         scoresPath="Nowruz-at-SemEval-2022-Task-7/Data/Val_Scores.tsv")
 
-testDataset = loadDataset("Data/Test_Dataset.tsv")
+testDataset = loadDataset("Nowruz-at-SemEval-2022-Task-7/Data/Test_Dataset.tsv")
 
 tokenizer = ts.AutoTokenizer.from_pretrained(PRE_TRAINED_MODEL)
 data_collator = ts.DataCollatorWithPadding(tokenizer=tokenizer , return_tensors="pt")
