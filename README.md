@@ -211,6 +211,10 @@ This method is used to make predictions on your own samples! you can input regul
 git clone https://github.com/mohammadmahdinoori/Nowruz-at-SemEval-2022-Task-7.git
 ```
 
+```bash
+pip install transformers datasets sentencepiece coral_pytorch
+```
+
 ```python
 import sys
 sys.path.append("Nowruz-at-SemEval-2022-Task-7/")
