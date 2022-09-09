@@ -289,3 +289,19 @@ output = inference(model,
 
 print(output)
 ```
+# Citation
+```bibtex
+@inproceedings{nouriborji-etal-2022-nowruz,
+    title = "Nowruz at {S}em{E}val-2022 Task 7: Tackling Cloze Tests with Transformers and Ordinal Regression",
+    author = "Nouriborji, Mohammadmahdi and Rohanian, Omid and Clifton, David",
+    booktitle = "Proceedings of the 16th International Workshop on Semantic Evaluation (SemEval-2022)",
+    month = jul,
+    year = "2022",
+    address = "Seattle, United States",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2022.semeval-1.151",
+    doi = "10.18653/v1/2022.semeval-1.151",
+    pages = "1071--1077",
+    abstract = "This paper outlines the system using which team Nowruz participated in SemEval 2022 Task 7 {``}Identifying Plausible Clarifications of Implicit and Underspecified Phrases{''} for both subtasks A and B. Using a pre-trained transformer as a backbone, the model targeted the task of multi-task classification and ranking in the context of finding the best fillers for a cloze task related to instructional texts on the website Wikihow. The system employed a combination of two ordinal regression components to tackle this task in a multi-task learning scenario. According to the official leaderboard of the shared task, this system was ranked 5th in the ranking and 7th in the classification subtasks out of 21 participating teams. With additional experiments, the models have since been further optimised. The code used in the experiments is going to be publicly available.",
+}
+```
